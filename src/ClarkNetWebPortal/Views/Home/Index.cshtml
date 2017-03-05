@@ -1,0 +1,57 @@
+﻿@model ClarkNetWebPortal.ViewModels.HomeViewModel
+
+@{
+	ViewData["Title"] = "Home Page";
+	Layout = "_HomeLayout";
+}
+
+<div id="applications" class="row">
+	<div class="ui cards">
+
+		@foreach (var host in Model.HostViewModels)
+		{
+			string colorState = string.Empty;
+			string iconState = string.Empty;
+			switch (host.State)
+			{
+				case ClarkNetWebPortal.ViewModels.ServiceState.Up:
+					colorState = "green";
+					iconState = "check";
+					break;
+				case ClarkNetWebPortal.ViewModels.ServiceState.Degraded:
+					colorState = "orange";
+					iconState = "warning sign";
+					break;
+				case ClarkNetWebPortal.ViewModels.ServiceState.Down:
+					colorState = "red";
+					iconState = "warning circle";
+					break;
+				default:
+					break;
+			}
+
+			<div class="@colorState raised card">
+				<div class="content">
+					<div class="header">@host.Host.DisplayName</div>
+					<div class="meta">
+						<span class="category">@host.Host.NameOrIpAddress</span>
+						<span class="category">@host.Host.Type.ToString()</span>
+					</div>
+					<div class="description">
+						@host.Host.Description
+					</div>
+				</div>
+				<div class="extra content">
+					<i class="@colorState @iconState icon"></i>
+					@host.SuccessCount out of @host.AttemptCount Pings Succeeded
+				</div>
+			</div>
+		}
+	</div>
+</div>
+<div id="ipcameras" class="row">
+</div>
+<div id="netappliances" class="row">
+</div>
+<div id="hosts" class="row">
+</div>
