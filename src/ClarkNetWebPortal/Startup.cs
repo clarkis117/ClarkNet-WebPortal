@@ -1,27 +1,26 @@
-﻿using ClarkNetWebPortal.DbContexts;
-using ClarkNetWebPortal.Models;
-using GenericMvc.Controllers;
-using GenericMvc.StartupUtils;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Formatting.Json;
+using GenericMvc.Controllers;
+using ClarkNetWebPortal.Models;
+using GenericMvc.StartupUtils;
+using ClarkNetWebPortal.DbContexts;
 
 namespace ClarkNetWebPortal
 {
-	public class Startup
-	{
-		/// <summary>
-		/// Should handle getting appsettings
-		///	And configure logging
-		/// </summary>
-		/// <param name="env"></param>
-		/// <param name="loggerFactory"></param>
-		public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
-		{
+    public class Startup
+    {
+        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
 			Configuration = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
 				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -37,15 +36,14 @@ namespace ClarkNetWebPortal
 			loggerFactory.AddSerilog();
 		}
 
-		public IConfigurationRoot Configuration { get; }
+        public IConfigurationRoot Configuration { get; }
 
-		/// <summary>
-		/// this is allowed to branch
-		/// </summary>
-		/// <param name="services"></param>
-		public void ConfigureServices(IServiceCollection services)
-		{
-			services.AddMvc();
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Add framework services.
+            services.AddMvc();
+
 
 			SqliteDbContext.ConnectionString = "Filename=./DataBase.db";
 			services.AddEntityFrameworkSqlite();
@@ -54,33 +52,36 @@ namespace ClarkNetWebPortal
 			EmbededFilesHelper.ConfigureEmbededFileProviders(services, EmbededFilesHelper.GetGenericMvcUtils());
 		}
 
-		/// <summary>
-		///
-		/// </summary>
-		/// <param name="app"></param>
-		/// <param name="env"></param>
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-		{
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
 			BasicModelsController.Initialize(typeof(Host));
 
 			if (env.IsDevelopment())
-			{
+            {
+				loggerFactory.AddConsole();
 				app.UseDeveloperExceptionPage();
-				app.UseBrowserLink();
-			}
-			else
-			{
-				app.UseExceptionHandler("/Home/Error");
-			}
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+                    HotModuleReplacement = true
+                });
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
 
-			app.UseStaticFiles();
+            app.UseStaticFiles();
 
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Aurelia}/");
-			});
-		}
-	}
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new { controller = "Home", action = "Index" });
+            });
+        }
+    }
 }
