@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ClarkNetWebPortal.Controllers.BasicMvc
 {
-    public class IpCameraController : BasicController<int, IpCamera>
+    public class IpCameraController //: BasicController<int, IpCamera>
     {
-        public IpCameraController(IEntityRepository<IpCamera> repository, ILogger<IpCamera> logger) : base(repository, logger)
+        public IpCameraController(IEntityRepository<IpCamera> repository, ILogger<IpCamera> logger) //: base(repository, logger)
         {
         }
     }

@@ -12,7 +12,6 @@ using Serilog;
 using Serilog.Formatting.Json;
 using GenericMvc.Controllers;
 using ClarkNetWebPortal.Models;
-using GenericMvc.StartupUtils;
 using ClarkNetWebPortal.DbContexts;
 
 namespace ClarkNetWebPortal
@@ -34,6 +33,11 @@ namespace ClarkNetWebPortal
 				.CreateLogger();
 
 			loggerFactory.AddSerilog();
+
+			if (env.IsDevelopment())
+			{
+				loggerFactory.AddConsole();
+			}
 		}
 
         public IConfigurationRoot Configuration { get; }
@@ -45,21 +49,20 @@ namespace ClarkNetWebPortal
             services.AddMvc();
 
 
-			SqliteDbContext.ConnectionString = "Filename=./DataBase.db";
-			services.AddEntityFrameworkSqlite();
+			//SqliteDbContext.ConnectionString = "Filename=./DataBase.db";
+			//services.AddEntityFrameworkSqlite();
 
 			//Add embedded file handlers
-			EmbededFilesHelper.ConfigureEmbededFileProviders(services, EmbededFilesHelper.GetGenericMvcUtils());
+			//EmbededFilesHelper.ConfigureEmbededFileProviders(services, EmbededFilesHelper.GetGenericMvcUtils());
 		}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-			BasicModelsController.Initialize(typeof(Host));
+			//BasicModelsController.Initialize(typeof(Host));
 
 			if (env.IsDevelopment())
             {
-				loggerFactory.AddConsole();
 				app.UseDeveloperExceptionPage();
                 app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                     HotModuleReplacement = true

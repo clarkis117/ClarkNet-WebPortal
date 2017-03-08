@@ -14,9 +14,9 @@ using Microsoft.Extensions.Logging;
 namespace ClarkNetWebPortal.Controllers.BasicMvc
 {
     [Authorize]
-    public class HostController : BasicController<int, Host>
+    public class HostController //: BasicController<int, Host>
     {
-        public HostController(IEntityRepository<Host> repository, ILogger<Host> logger) : base(repository, logger)
+        public HostController(IEntityRepository<Host> repository, ILogger<Host> logger) //: base(repository, logger)
         {
         }
     }

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace ClarkNetWebPortal.Controllers.BasicMvc
 {
-    public class NetworkApplianceController : BasicController<int, NetworkAppliance>
+    public class NetworkApplianceController// : BasicController<int, NetworkAppliance>
     {
-        public NetworkApplianceController(IEntityRepository<NetworkAppliance> repository, ILogger<NetworkAppliance> logger) : base(repository, logger)
+        public NetworkApplianceController(IEntityRepository<NetworkAppliance> repository, ILogger<NetworkAppliance> logger) //: base(repository, logger)
         {
         }
     }

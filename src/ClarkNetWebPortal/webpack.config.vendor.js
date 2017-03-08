@@ -32,6 +32,8 @@ module.exports = {
             'es6-promise',
             'jquery',
             'zone.js',
+			"semantic-ui-css/semantic.css",
+			"semantic-ui-css/semantic.js"
         ]
     },
     output: {

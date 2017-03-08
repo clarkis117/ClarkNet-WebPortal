@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClarkNetWebPortal.Controllers
 {
-    public class ModelsController : BasicModelsController
+    public class ModelsController //: BasicModelsController
     {
     }
 }
