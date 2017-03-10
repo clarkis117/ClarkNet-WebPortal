@@ -10,9 +10,5 @@ namespace ClarkNet.Lib
 			return Task.FromResult<object>(null);
 		}
 
-		public (int a, int b) Ver()
-		{
-			return (5,5);
-		}
     }
 }
