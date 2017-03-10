@@ -21,11 +21,11 @@ import { HeroComponent } from './components/hero/hero.component';
     imports: [
         UniversalModule, // Must be first import. This automatically imports BrowserModule, HttpModule, and JsonpModule too.
         RouterModule.forRoot([
-			{ path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: '', redirectTo: 'home', pathMatch: 'full' },
+			{ path: 'home', component: HomeComponent },
 			{ path: 'hero', component: HeroComponent },
-            { path: 'home', component: HomeComponent },
             { path: 'counter', component: CounterComponent },
-			{ path: 'fetch-data', component: FetchDataComponent },
+            { path: 'fetch-data', component: FetchDataComponent },
             { path: '**', redirectTo: 'home' }
         ])
     ]

@@ -2,9 +2,9 @@
 
 @Component({
 	selector: 'hero',
-	template: require('./hero.component.html')
+	template: `<h1>Hello {{title}}</h1>`
 })
 export class HeroComponent {
-	title = 'tour of heros';
-	hero = 'windstorm';
+	title = "hero";
+	hero = "done";
 }
