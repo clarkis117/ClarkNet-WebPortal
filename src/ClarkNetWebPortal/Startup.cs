@@ -13,13 +13,17 @@ using Serilog.Formatting.Json;
 using GenericMvc.Controllers;
 using ClarkNetWebPortal.Models;
 using ClarkNetWebPortal.DbContexts;
+using ClarkNet.WebPortal.Services;
+using ClarkNet.WebPortal.Wifi;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace ClarkNetWebPortal
 {
-    public class Startup
-    {
-        public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
+	public class Startup
+	{
+		public Startup(IHostingEnvironment env, ILoggerFactory loggerFactory)
+		{
 			Configuration = new ConfigurationBuilder()
 				.SetBasePath(env.ContentRootPath)
 				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
@@ -38,16 +42,25 @@ namespace ClarkNetWebPortal
 			{
 				loggerFactory.AddConsole();
 			}
+
+			LoggerFactory = loggerFactory;
 		}
 
-        public IConfigurationRoot Configuration { get; }
+		public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            services.AddMvc();
+		public ILoggerFactory LoggerFactory { get; }
 
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			// Add framework services.
+			services.AddMvc();
+
+			var wifiService = new WiFiApService
+				(JsonConvert.DeserializeObject<WifiConfig>(File.ReadAllText(@"./Config/WifiConfig.json")),
+				LoggerFactory.CreateLogger<WiFiApService>());
+
+			services.AddSingleton(wifiService);
 
 			//SqliteDbContext.ConnectionString = "Filename=./DataBase.db";
 			//services.AddEntityFrameworkSqlite();
@@ -56,35 +69,35 @@ namespace ClarkNetWebPortal
 			//EmbededFilesHelper.ConfigureEmbededFileProviders(services, EmbededFilesHelper.GetGenericMvcUtils());
 		}
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		{
 			//BasicModelsController.Initialize(typeof(Host));
 
 			if (env.IsDevelopment())
-            {
+			{
 				app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
-                    HotModuleReplacement = true
-                });
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
+				app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
+					HotModuleReplacement = true
+				});
+			}
+			else
+			{
+				app.UseExceptionHandler("/Home/Error");
+			}
 
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+			app.UseMvc(routes =>
+			{
+				routes.MapRoute(
+					name: "default",
+					template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
-            });
-        }
-    }
+				routes.MapSpaFallbackRoute(
+					name: "spa-fallback",
+					defaults: new { controller = "Home", action = "Index" });
+			});
+		}
+	}
 }

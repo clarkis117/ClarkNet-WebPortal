@@ -1,13 +1,13 @@
-﻿using ClarkNetWebPortal.Models;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Serilog.Core;
 
 namespace ClarkNetWebPortal.Services
 {
+	/*
     /// <summary>
     /// summery launches vlc transcoding processes
     /// ex. "C:\Program Files\VideoLAN\VLC\vlc.exe" -I dummy screen:// :screen-fps=16.000000 :screen-caching=100 :sout=#transcode{vcodec=theo,vb=800,scale=1,width=600,height‌​=480,acodec=mp3}:htt‌​p{mux=ogg,dst=127.0.‌​0.1:8080/desktop.ogg‌​} :no-sout-rtp-sap :no-sout-standard-sap :ttl=1 :sout-keep
@@ -18,11 +18,11 @@ namespace ClarkNetWebPortal.Services
 
         private Stack<Process> _processes = new Stack<Process>();
 
-        private readonly ILogger<IpCameraVideo> _logger;
+        private readonly Logger _logger;
 
         private readonly string _videoOutputPath;
 
-        public IpCameraVideo(ILogger<IpCameraVideo> logger, string videoOutputPath)
+        public IpCameraVideo(Logger logger, string videoOutputPath)
         {
             _logger = logger;
 
@@ -45,7 +45,7 @@ namespace ClarkNetWebPortal.Services
             }
             catch (Exception e)
             {
-                _logger.LogError("Vlc Process failed to start: " + e.Message, e);
+                _logger.Error("Vlc Process failed to start: " + e.Message, e);
 
                 throw e;
             }
@@ -81,4 +81,5 @@ namespace ClarkNetWebPortal.Services
         }
 
     }
+	*/
 }

@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace ClarkNet.WebPortal.Services
 {
-    public class Process
-    {
+	public class Process
+	{
 		public string PathToExe { get; set; }
 
 		public IReadOnlyList<SubProcess> SubProcesses { get; set; }

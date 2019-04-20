@@ -1,11 +1,10 @@
-﻿using ClarkNetWebPortal.Models;
-using ClarkNetWebPortal.ViewModels;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace ClarkNetWebPortal.Services
 {
+	/*
 	public class HttpAppPinger : IDisposable
 	{
 		private readonly HttpClient _httpClient;
@@ -70,4 +69,5 @@ namespace ClarkNetWebPortal.Services
 
 		#endregion IDisposable Support
 	}
+	*/
 }
